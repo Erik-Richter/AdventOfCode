@@ -1,44 +1,49 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
 
         List<Integer> tips = readTips();
         List<BingoTable> sheets = readBingoSheets();
-        //System.out.println(tips);
-        //System.out.println(sheets);
+        List<BingoTable> winners = new ArrayList<>();
+        Set<Integer> winnerIndexes = new LinkedHashSet<>();
         int index = 0;
         int lastTip = -1;
         int winnerUnmarkedCount;
 
-        boolean win = false;
-
         for (Integer tip : tips) {
-            for (BingoTable sheet : sheets){
+            for (BingoTable sheet : sheets){ // mark number on all sheet
                 sheet.markNumberOnSheet(tip);
             }
-            for (int i=0; i<sheets.size(); i++){
+            for(int i=0; i<sheets.size(); i++){
                 if(sheets.get(i).isWinner()){
-                    win = true;
-                    index = i;
-                    lastTip = tip;
+                    if(!winnerIndexes.contains(i)) {
+                        winnerIndexes.add(i);
+                        winners.add(sheets.get(i));
+                        lastTip = tip;
+                        index = i;
+                    }
                 }
             }
-            if(win){
-                System.out.println("win");
+            if(winners.size() == sheets.size()){
+                System.out.println("WIN");
                 break;
             }
+
         }
 
         winnerUnmarkedCount = sheets.get(index).countUnmarkedFields();
 
         System.out.println("Player: " + index);
         System.out.println("with last marked number: " + lastTip);
-        System.out.println("Player's Bingo sheet:\n" + sheets.get(index));
+        System.out.println("Player's Bingo sheet:\n" + winners.get(winners.size() -1));
         System.out.println("AoC result: " + (winnerUnmarkedCount * lastTip));
+
     }
 
     public static List<Integer> readTips(){
