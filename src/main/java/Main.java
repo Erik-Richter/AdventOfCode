@@ -54,12 +54,12 @@ public class Main {
                 x2 = Integer.parseInt(b[0]);
                 y2 = Integer.parseInt(b[1]);
 
-                if(x1 == x2 || y1 == y2)
-                    mainList.add(new Line(x1, y1, x2, y2));
+
+                mainList.add(new Line(x1, y1, x2, y2));
             }
             br.close();
         }catch (Exception e){
-            System.out.println("My Main() exception");
+            throw new IllegalStateException("loadData exception");
         }
         return mainList;
     }
